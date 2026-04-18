@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Koontz Wedding Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#1B2A4A;--brown:#6B4226;--gold:#C9A84C;--burgundy:#6D1A2A;
-  --cream:#F9F5EE;--text:#2C2420;--text2:#6B5C54;--border:#E2D9D0;
+  --navy:#1B2A4A;--gold:#C9A84C;--burgundy:#6D1A2A;--brown:#6B4226;
+  --text:#2C2420;--text2:#6B5C54;--border:#E2D9D0;
   --bg:#FFFFFF;--bg2:#F9F5EE;--bg3:#F0E8DF;
   --urgent-bg:#FCEBEB;--urgent:#A32D2D;
   --soon-bg:#FAEEDA;--soon:#854F0B;
@@ -19,36 +19,23 @@
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
 .app{max-width:1100px;margin:0 auto;padding:1.5rem}
-
-/* HEADER */
 .hdr{background:var(--navy);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center}
-.hdr-left h1{font-size:20px;font-weight:600;color:#fff;letter-spacing:.3px}
-.hdr-left .sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
-.cdown{text-align:right}
-.cdown .days{font-size:28px;font-weight:700;color:var(--gold)}
-.cdown .clbl{font-size:11px;color:rgba(255,255,255,.6)}
-.save-indicator{font-size:11px;color:var(--gold);margin-top:4px;min-height:16px;transition:opacity .3s}
-
-/* METRICS */
+.hdr h1{font-size:20px;font-weight:600;color:#fff}
+.hdr .sub{font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
+.save-ind{font-size:11px;color:var(--gold);margin-top:4px;min-height:16px}
+.cdown .days{font-size:28px;font-weight:700;color:var(--gold);text-align:right}
+.cdown .clbl{font-size:11px;color:rgba(255,255,255,.6);text-align:right}
 .mrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1rem}
-.mcard{background:var(--bg);border-radius:10px;padding:.875rem 1rem;border:.5px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.mcard .ml{font-size:11px;color:var(--text2);margin-bottom:3px}
-.mcard .mv{font-size:18px;font-weight:600;color:var(--navy)}
-.mcard .ms{font-size:11px;color:var(--text2);margin-top:2px}
-
-/* TABS */
+.mc{background:var(--bg);border-radius:10px;padding:.875rem 1rem;border:.5px solid var(--border)}
+.mc .ml{font-size:11px;color:var(--text2);margin-bottom:3px}
+.mc .mv{font-size:18px;font-weight:600;color:var(--navy)}
+.mc .ms{font-size:11px;color:var(--text2);margin-top:2px}
 .tabs{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:4px;margin-bottom:1rem;border:.5px solid var(--border);overflow-x:auto}
-.tab{font-size:12px;padding:7px 14px;cursor:pointer;border:none;border-radius:8px;color:var(--text2);background:none;white-space:nowrap;font-weight:500;transition:all .15s}
-.tab:hover{background:var(--bg2);color:var(--navy)}
+.tab{font-size:12px;padding:7px 14px;cursor:pointer;border:none;border-radius:8px;color:var(--text2);background:none;white-space:nowrap;font-weight:500}
 .tab.active{background:var(--navy);color:#fff}
 .panel{display:none}.panel.active{display:block}
-
-/* CARDS */
-.card{background:var(--bg);border:.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:.875rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.card-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:.875rem}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* BADGES */
+.card{background:var(--bg);border:.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:.875rem}
+.hint{font-size:11px;color:var(--text2);margin-bottom:10px}
 .badge{font-size:11px;padding:2px 8px;border-radius:10px;display:inline-block;white-space:nowrap;font-weight:500}
 .b-urgent{background:var(--urgent-bg);color:var(--urgent)}
 .b-soon{background:var(--soon-bg);color:var(--soon)}
@@ -61,115 +48,90 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .b-done{background:var(--later-bg);color:var(--later)}
 .b-open{background:var(--soon-bg);color:var(--soon)}
 .b-future{background:var(--bg3);color:var(--text2)}
-
-/* PILLS */
 .pills{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
-.pill{font-size:12px;padding:4px 12px;border-radius:20px;border:.5px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;font-weight:500;transition:all .15s}
-.pill:hover{border-color:var(--navy);color:var(--navy)}
+.pill{font-size:12px;padding:4px 12px;border-radius:20px;border:.5px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;font-weight:500}
 .pill.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-
-/* TASKS */
-.task-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid var(--border)}
-.task-item:last-child{border-bottom:none}
-.task-item.done .ttext{text-decoration:line-through;color:var(--text2)}
-.ttext{font-size:13px;color:var(--text);flex:1;line-height:1.5;outline:none;cursor:text}
-.ttext:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.task-sel{font-size:11px;padding:3px 5px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);cursor:pointer}
-.del-btn{font-size:16px;color:var(--border);background:none;border:none;cursor:pointer;padding:0 2px;flex-shrink:0;line-height:1;transition:color .15s}
-.del-btn:hover{color:var(--urgent)}
-
-/* BUDGET */
-.bline{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.blabel{font-size:13px;color:var(--text);width:190px;flex-shrink:0;outline:none;cursor:text}
-.blabel:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.bbar-wrap{flex:1;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
-.bbar{height:8px;border-radius:4px;transition:width .4s}
-.num-input{width:74px;font-size:12px;padding:3px 6px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);text-align:right;font-family:inherit}
-.num-input:focus{outline:none;border-color:var(--navy)}
-.bamts{font-size:12px;color:var(--text2)}
-.btotal-row{border-top:.5px solid var(--border);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--navy)}
-
-/* TIMELINE */
+.ti{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:.5px solid var(--border)}
+.ti:last-child{border-bottom:none}
+.ti.done .tt{text-decoration:line-through;color:var(--text2)}
+.tt{font-size:13px;color:var(--text);flex:1;line-height:1.5;outline:none}
+.tt:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.tsel{font-size:11px;padding:3px 5px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text)}
+.del{font-size:16px;color:var(--border);background:none;border:none;cursor:pointer;padding:0 2px;line-height:1}
+.del:hover{color:var(--urgent)}
+.bl{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.blb{font-size:13px;color:var(--text);width:190px;flex-shrink:0;outline:none}
+.blb:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.bw{flex:1;background:var(--bg3);border-radius:4px;height:8px;overflow:hidden}
+.bf{height:8px;border-radius:4px;transition:width .4s}
+.ni{width:74px;font-size:12px;padding:3px 6px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);text-align:right;font-family:inherit}
+.ni:focus{outline:none;border-color:var(--navy)}
+.bamt{font-size:12px;color:var(--text2)}
+.btot{border-top:.5px solid var(--border);padding-top:10px;margin-top:4px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--navy)}
 .tli{display:flex;gap:12px;padding:8px 0;border-bottom:.5px solid var(--border);align-items:flex-start}
 .tli:last-child{border-bottom:none}
-.tli-date{font-size:12px;color:var(--text2);width:82px;flex-shrink:0;padding-top:2px;outline:none;cursor:text}
-.tli-date:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.tli-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.tli-body{flex:1}
-.tli-title{font-size:13px;font-weight:500;color:var(--text);outline:none;cursor:text}
-.tli-title:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.tli-detail{font-size:12px;color:var(--text2);margin-top:2px;outline:none;cursor:text}
-.tli-detail:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.tli-st{font-size:11px;padding:3px 9px;border-radius:10px;flex-shrink:0;cursor:pointer;font-weight:500;transition:opacity .15s}
-.tli-st:hover{opacity:.75}
-
-/* SHOPPING */
-.cat-block{margin-bottom:.875rem}
-.cat-hdr{display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;user-select:none;padding:6px 8px;border-radius:8px;transition:background .15s}
-.cat-hdr:hover{background:var(--bg2)}
-.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.cat-name{font-size:13px;font-weight:600;color:var(--navy)}
-.cat-ct{font-size:12px;color:var(--text2)}
-.cat-tog{font-size:12px;color:var(--text2);margin-left:auto}
-.shop-table{width:100%;border-collapse:collapse;font-size:13px}
-.shop-table thead th{font-size:11px;font-weight:600;color:var(--text2);text-align:left;padding:5px 8px;border-bottom:.5px solid var(--border);background:var(--bg2)}
-.shop-table tbody tr{border-bottom:.5px solid var(--border)}
-.shop-table tbody tr:last-child{border-bottom:none}
-.shop-table tbody tr.checked{opacity:.4}
-.shop-table tbody td{padding:6px 8px;vertical-align:middle}
-.shop-table tbody tr.checked td{text-decoration:line-through;color:var(--text2)}
-.shop-table tbody tr.checked td.ns{text-decoration:none}
-.editable{outline:none;cursor:text;display:block;width:100%}
-.editable:focus{background:var(--bg2);border-radius:3px;padding:1px 3px}
-
-/* VENDORS */
-.vtable{width:100%;border-collapse:collapse;font-size:13px}
-.vtable thead th{font-size:11px;font-weight:600;color:var(--text2);text-align:left;padding:6px 10px;border-bottom:.5px solid var(--border);background:var(--bg2)}
-.vtable tbody tr{border-bottom:.5px solid var(--border);transition:background .1s}
-.vtable tbody tr:last-child{border-bottom:none}
-.vtable tbody tr:hover{background:var(--bg2)}
-.vtable tbody td{padding:7px 10px;vertical-align:middle}
-
-/* SCHEDULE */
-.sched-item{display:flex;gap:12px;padding:8px 0;border-bottom:.5px solid var(--border);align-items:flex-start}
-.sched-item:last-child{border-bottom:none}
-.sched-time{font-size:12px;font-weight:700;color:var(--navy);width:82px;flex-shrink:0;outline:none;cursor:text}
-.sched-time:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.sched-label{font-size:13px;font-weight:500;color:var(--text);outline:none;cursor:text}
-.sched-label:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-.sched-detail{font-size:12px;color:var(--text2);margin-top:1px;outline:none;cursor:text}
-.sched-detail:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
-
-/* ADD ROW */
-.add-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;padding-top:10px;border-top:.5px solid var(--border)}
-.add-row input[type=text],.add-row input[type=number]{font-size:12px;padding:6px 10px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit}
-.add-row input[type=text]{flex:1;min-width:120px}
-.add-row input[type=number]{width:90px}
-.add-row select{font-size:12px;padding:6px 8px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit}
-.add-row button,.btn{font-size:12px;padding:6px 14px;border:.5px solid var(--navy);border-radius:6px;background:var(--navy);color:#fff;cursor:pointer;font-weight:500;font-family:inherit;transition:opacity .15s}
-.add-row button:hover,.btn:hover{opacity:.85}
-
-/* GUESTS */
-.guest-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1rem}
-.party-col{column-count:2;column-gap:12px}
-.party-name{font-size:12px;color:var(--text);padding:2px 0;break-inside:avoid}
-
-/* LOADING */
-.loading{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--text2);font-size:14px}
-.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;margin-right:10px}
+.tld{font-size:12px;color:var(--text2);width:82px;flex-shrink:0;padding-top:2px;outline:none}
+.tld:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.tldot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.tlb{flex:1}
+.tlt{font-size:13px;font-weight:500;color:var(--text);outline:none}
+.tlt:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.tldt{font-size:12px;color:var(--text2);margin-top:2px;outline:none}
+.tldt:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.tlst{font-size:11px;padding:3px 9px;border-radius:10px;flex-shrink:0;cursor:pointer;font-weight:500}
+.cb{margin-bottom:.875rem}
+.ch{display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;padding:6px 8px;border-radius:8px}
+.ch:hover{background:var(--bg2)}
+.cdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cn{font-size:13px;font-weight:600;color:var(--navy)}
+.cct{font-size:12px;color:var(--text2)}
+.ctog{font-size:12px;color:var(--text2);margin-left:auto}
+.st{width:100%;border-collapse:collapse;font-size:13px}
+.st thead th{font-size:11px;font-weight:600;color:var(--text2);text-align:left;padding:5px 8px;border-bottom:.5px solid var(--border);background:var(--bg2)}
+.st tbody tr{border-bottom:.5px solid var(--border)}
+.st tbody tr:last-child{border-bottom:none}
+.st tbody tr.ck{opacity:.4}
+.st tbody td{padding:6px 8px;vertical-align:middle}
+.st tbody tr.ck td{text-decoration:line-through;color:var(--text2)}
+.st tbody tr.ck td.ns{text-decoration:none}
+.ed{outline:none;cursor:text;display:block;width:100%}
+.ed:focus{background:var(--bg2);border-radius:3px;padding:1px 3px}
+.vt{width:100%;border-collapse:collapse;font-size:13px}
+.vt thead th{font-size:11px;font-weight:600;color:var(--text2);text-align:left;padding:6px 10px;border-bottom:.5px solid var(--border);background:var(--bg2)}
+.vt tbody tr{border-bottom:.5px solid var(--border)}
+.vt tbody tr:last-child{border-bottom:none}
+.vt tbody tr:hover{background:var(--bg2)}
+.vt tbody td{padding:7px 10px;vertical-align:middle}
+.sci{display:flex;gap:12px;padding:8px 0;border-bottom:.5px solid var(--border);align-items:flex-start}
+.sci:last-child{border-bottom:none}
+.sct{font-size:12px;font-weight:700;color:var(--navy);width:82px;flex-shrink:0;outline:none}
+.sct:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.scl{font-size:13px;font-weight:500;color:var(--text);outline:none}
+.scl:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.scd{font-size:12px;color:var(--text2);margin-top:1px;outline:none}
+.scd:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+.ar{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;padding-top:10px;border-top:.5px solid var(--border)}
+.ar input[type=text],.ar input[type=number]{font-size:12px;padding:6px 10px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit}
+.ar input[type=text]{flex:1;min-width:120px}
+.ar input[type=number]{width:90px}
+.ar select{font-size:12px;padding:6px 8px;border:.5px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-family:inherit}
+.ar button,.btn{font-size:12px;padding:6px 14px;border:.5px solid var(--navy);border-radius:6px;background:var(--navy);color:#fff;cursor:pointer;font-weight:500;font-family:inherit}
+.gs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1rem}
+.pc{column-count:2;column-gap:12px}
+.pn{font-size:12px;color:var(--text);padding:2px 0;break-inside:avoid}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ld{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--text2);font-size:14px}
+.sp{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;margin-right:10px}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* HINT */
-.hint{font-size:11px;color:var(--text2);margin-bottom:10px}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="hdr">
-    <div class="hdr-left">
+    <div>
       <h1>Koontz Wedding Dashboard</h1>
       <div class="sub">September 18–20, 2026 · Corrales, New Mexico · Officiant: Jerry Pope</div>
-      <div class="save-indicator" id="saveInd"></div>
+      <div class="save-ind" id="saveInd"></div>
     </div>
     <div class="cdown">
       <div class="days" id="daysOut">—</div>
@@ -178,11 +140,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="mrow">
-    <div class="mcard"><div class="ml">Tasks complete</div><div class="mv" id="mTasks">—</div><div class="ms" id="mTasksPct">—</div></div>
-    <div class="mcard"><div class="ml">Budget spent</div><div class="mv" id="mSpent">—</div><div class="ms" id="mSpentSub">—</div></div>
-    <div class="mcard"><div class="ml">Budget remaining</div><div class="mv" id="mRem">—</div><div class="ms" id="mRemPct">—</div></div>
-    <div class="mcard"><div class="ml">Shopping checked off</div><div class="mv" id="mShop">—</div><div class="ms" id="mShopPct">—</div></div>
-    <div class="mcard"><div class="ml">Guests on list</div><div class="mv">231</div><div class="ms">136 out of town</div></div>
+    <div class="mc"><div class="ml">Tasks complete</div><div class="mv" id="mT">—</div><div class="ms" id="mTP">—</div></div>
+    <div class="mc"><div class="ml">Budget spent</div><div class="mv" id="mS">—</div><div class="ms" id="mSS">—</div></div>
+    <div class="mc"><div class="ml">Budget remaining</div><div class="mv" id="mR">—</div><div class="ms" id="mRP">—</div></div>
+    <div class="mc"><div class="ml">Shopping checked off</div><div class="mv" id="mSh">—</div><div class="ms" id="mShP">—</div></div>
+    <div class="mc"><div class="ml">Guests on list</div><div class="mv">231</div><div class="ms">136 out of town</div></div>
   </div>
 
   <div class="tabs">
@@ -195,151 +157,129 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="switchTab('dayof',this)">Day-of schedule</button>
   </div>
 
-  <!-- TASKS -->
   <div class="panel active" id="panel-tasks">
     <div class="card">
-      <div class="pills" id="taskPills">
-        <button class="pill active" onclick="filterTasks('all',this)">All open</button>
-        <button class="pill" onclick="filterTasks('urgent',this)">Urgent</button>
-        <button class="pill" onclick="filterTasks('soon',this)">Soon</button>
-        <button class="pill" onclick="filterTasks('later',this)">Later</button>
-        <button class="pill" onclick="filterTasks('done',this)">Done</button>
+      <div class="pills" id="tPills">
+        <button class="pill active" onclick="fTasks('all',this)">All open</button>
+        <button class="pill" onclick="fTasks('urgent',this)">Urgent</button>
+        <button class="pill" onclick="fTasks('soon',this)">Soon</button>
+        <button class="pill" onclick="fTasks('later',this)">Later</button>
+        <button class="pill" onclick="fTasks('done',this)">Done</button>
       </div>
-      <div id="taskList"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-      <div class="add-row">
-        <input type="text" id="newTaskText" placeholder="New task..." />
-        <select id="newTaskPri"><option value="urgent">Urgent</option><option value="soon" selected>Soon</option><option value="later">Later</option></select>
+      <div id="taskList"><div class="ld"><div class="sp"></div>Loading...</div></div>
+      <div class="ar">
+        <input type="text" id="nTT" placeholder="New task..." />
+        <select id="nTP"><option value="urgent">Urgent</option><option value="soon" selected>Soon</option><option value="later">Later</option></select>
         <button onclick="addTask()">+ Add task</button>
       </div>
     </div>
   </div>
 
-  <!-- BUDGET -->
   <div class="panel" id="panel-budget">
     <div class="card">
-      <div class="hint">Edit "Spent" and "Budget" fields directly. Category names are editable inline.</div>
-      <div id="budgetList"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-      <div class="btotal-row"><span>Total</span><span id="budgetTotal">—</span></div>
-      <div class="add-row">
-        <input type="text" id="newBCat" placeholder="Category name" />
-        <input type="number" id="newBTotal" placeholder="Budget $" />
-        <button onclick="addBudgetCat()">+ Add category</button>
+      <div class="hint">Type directly into Spent or Budget fields · Click category name to edit</div>
+      <div id="budgetList"><div class="ld"><div class="sp"></div>Loading...</div></div>
+      <div class="btot"><span>Total</span><span id="bTot">—</span></div>
+      <div class="ar">
+        <input type="text" id="nBC" placeholder="Category name" />
+        <input type="number" id="nBT" placeholder="Budget $" />
+        <button onclick="addBCat()">+ Add category</button>
       </div>
     </div>
   </div>
 
-  <!-- TIMELINE -->
   <div class="panel" id="panel-timeline">
     <div class="card">
-      <div class="hint">Click a status badge to cycle it · Click any text to edit inline</div>
-      <div id="timelineList"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-      <div class="add-row">
-        <input type="text" id="newTLDate" placeholder="Date" style="width:90px;flex:none" />
-        <input type="text" id="newTLTitle" placeholder="Title" />
-        <input type="text" id="newTLDetail" placeholder="Details (optional)" />
-        <button onclick="addTLItem()">+ Add</button>
+      <div class="hint">Click status badge to cycle · Click any text to edit inline</div>
+      <div id="timelineList"><div class="ld"><div class="sp"></div>Loading...</div></div>
+      <div class="ar">
+        <input type="text" id="nTLD" placeholder="Date" style="width:90px;flex:none" />
+        <input type="text" id="nTLT" placeholder="Title" />
+        <input type="text" id="nTLDt" placeholder="Details (optional)" />
+        <button onclick="addTL()">+ Add</button>
       </div>
     </div>
   </div>
 
-  <!-- SHOPPING -->
   <div class="panel" id="panel-shopping">
-    <div class="pills" id="shopPills">
-      <button class="pill active" onclick="filterShop('all',this)">All</button>
-      <button class="pill" onclick="filterShop('urgent',this)">Urgent</button>
-      <button class="pill" onclick="filterShop('soon',this)">Soon</button>
-      <button class="pill" onclick="filterShop('later',this)">Later</button>
-      <button class="pill" onclick="filterShop('booked',this)">Booked</button>
-      <button class="pill" onclick="filterShop('diy',this)">DIY</button>
+    <div class="pills" id="sPills">
+      <button class="pill active" onclick="fShop('all',this)">All</button>
+      <button class="pill" onclick="fShop('urgent',this)">Urgent</button>
+      <button class="pill" onclick="fShop('soon',this)">Soon</button>
+      <button class="pill" onclick="fShop('later',this)">Later</button>
+      <button class="pill" onclick="fShop('booked',this)">Booked</button>
+      <button class="pill" onclick="fShop('diy',this)">DIY</button>
     </div>
-    <div id="shopList"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+    <div id="shopList"><div class="ld"><div class="sp"></div>Loading...</div></div>
     <div class="card">
-      <div class="card-title">Add a shopping item</div>
-      <div class="add-row" style="border-top:none;padding-top:0">
-        <input type="text" id="siItem" placeholder="Item name" />
-        <input type="text" id="siVendor" placeholder="Vendor" style="width:130px;flex:none" />
-        <input type="text" id="siQty" placeholder="Qty / notes" style="width:110px;flex:none" />
-        <select id="siCat"><option>Florals & Décor</option><option>Swag & Favors</option><option>Welcome Bags</option><option>Signage & Stationery</option><option>Wedding Party Gifts</option><option>Venues & Vendors</option><option>Food & Drink</option><option>Day-of Logistics</option><option>Rentals</option></select>
-        <select id="siUrg"><option value="urgent">Urgent</option><option value="soon" selected>Soon</option><option value="later">Later</option><option value="booked">Booked</option><option value="diy">DIY</option></select>
-        <button onclick="addShopItem()">+ Add</button>
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:8px">Add a shopping item</div>
+      <div class="ar" style="border-top:none;padding-top:0">
+        <input type="text" id="siI" placeholder="Item name" />
+        <input type="text" id="siV" placeholder="Vendor" style="width:130px;flex:none" />
+        <input type="text" id="siQ" placeholder="Qty / notes" style="width:110px;flex:none" />
+        <select id="siC"><option>Florals & Décor</option><option>Swag & Favors</option><option>Welcome Bags</option><option>Signage & Stationery</option><option>Wedding Party Gifts</option><option>Venues & Vendors</option><option>Food & Drink</option><option>Day-of Logistics</option><option>Rentals</option></select>
+        <select id="siU"><option value="urgent">Urgent</option><option value="soon" selected>Soon</option><option value="later">Later</option><option value="booked">Booked</option><option value="diy">DIY</option></select>
+        <button onclick="addShop()">+ Add</button>
       </div>
     </div>
   </div>
 
-  <!-- VENDORS -->
   <div class="panel" id="panel-vendors">
     <div class="card">
       <div class="hint">Click status badge to cycle · Click any cell to edit inline</div>
-      <table class="vtable">
+      <table class="vt">
         <thead><tr><th>Service</th><th>Vendor</th><th>Responsible</th><th>Notes</th><th>Status</th><th style="width:24px"></th></tr></thead>
-        <tbody id="vendorBody"><tr><td colspan="6"><div class="loading"><div class="spinner"></div>Loading...</div></td></tr></tbody>
+        <tbody id="vBody"><tr><td colspan="6"><div class="ld"><div class="sp"></div>Loading...</div></td></tr></tbody>
       </table>
-      <div class="add-row">
-        <input type="text" id="vService" placeholder="Service" />
-        <input type="text" id="vVendor" placeholder="Vendor name" />
-        <input type="text" id="vResp" placeholder="Responsible" style="width:110px;flex:none" />
-        <input type="text" id="vNotes" placeholder="Notes" />
-        <select id="vStatus"><option value="completed">Completed</option><option value="working" selected>Working</option><option value="not-completed">Not completed</option></select>
+      <div class="ar">
+        <input type="text" id="vS" placeholder="Service" />
+        <input type="text" id="vV" placeholder="Vendor name" />
+        <input type="text" id="vR" placeholder="Responsible" style="width:110px;flex:none" />
+        <input type="text" id="vN" placeholder="Notes" />
+        <select id="vSt"><option value="completed">Completed</option><option value="working" selected>Working</option><option value="not-completed">Not completed</option></select>
         <button onclick="addVendor()">+ Add</button>
       </div>
     </div>
   </div>
 
-  <!-- GUESTS -->
   <div class="panel" id="panel-guests">
-    <div class="guest-stats">
-      <div class="mcard"><div class="ml">Total guest list</div><div class="mv">231</div><div class="ms">All invited to all events</div></div>
-      <div class="mcard"><div class="ml">Out of town</div><div class="mv">136</div><div class="ms">Welcome bag candidates</div></div>
-      <div class="mcard"><div class="ml">Invitations needed</div><div class="mv">127</div><div class="ms">Order 135–140 with buffer</div></div>
-      <div class="mcard"><div class="ml">Invites stamp-ready</div><div class="mv">115</div><div class="ms">12 addresses unconfirmed</div></div>
+    <div class="gs">
+      <div class="mc"><div class="ml">Total guest list</div><div class="mv">231</div><div class="ms">All invited to all events</div></div>
+      <div class="mc"><div class="ml">Out of town</div><div class="mv">136</div><div class="ms">Welcome bag candidates</div></div>
+      <div class="mc"><div class="ml">Invitations needed</div><div class="mv">127</div><div class="ms">Order 135–140 with buffer</div></div>
+      <div class="mc"><div class="ml">Stamp-ready</div><div class="mv">115</div><div class="ms">12 addresses unconfirmed</div></div>
     </div>
-    <div class="two-col">
+    <div class="tc">
       <div class="card">
-        <div class="card-title">Groomsmen (29)</div>
-        <div class="party-col">
-          <div class="party-name">Alma Parton</div><div class="party-name">Chad Zaneis</div>
-          <div class="party-name">Cody Randazzo</div><div class="party-name">Courtenay Eichhorst</div>
-          <div class="party-name">Courtenay Koontz (Best Man)</div><div class="party-name">Eric Strauss</div>
-          <div class="party-name">Jake Neill</div><div class="party-name">Jason Ayala</div>
-          <div class="party-name">Jason Chavez</div><div class="party-name">Jason Graber</div>
-          <div class="party-name">Jeremiah Zazueta</div><div class="party-name">Jim Ed Eichhorst</div>
-          <div class="party-name">John Chavez</div><div class="party-name">Justin Koontz</div>
-          <div class="party-name">Lethan Olvera</div><div class="party-name">Marcelina Martinez</div>
-          <div class="party-name">Michael Montoya</div><div class="party-name">Michael Vento</div>
-          <div class="party-name">Mike Gallagher</div><div class="party-name">Nick Pecora</div>
-          <div class="party-name">OJ Marquez</div><div class="party-name">PJ Parton</div>
-          <div class="party-name">Richard Salas</div><div class="party-name">Roman Lueras</div>
-          <div class="party-name">Shay Demmons</div><div class="party-name">Strat Nellos</div>
-          <div class="party-name">Toby Reese</div><div class="party-name">Whitney Wingfield</div>
-          <div class="party-name">Jacque Ayala</div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">Groomsmen (29)</div>
+        <div class="pc">
+          <div class="pn">Alma Parton</div><div class="pn">Chad Zaneis</div><div class="pn">Cody Randazzo</div>
+          <div class="pn">Courtenay Eichhorst</div><div class="pn">Courtenay Koontz (Best Man)</div><div class="pn">Eric Strauss</div>
+          <div class="pn">Jake Neill</div><div class="pn">Jason Ayala</div><div class="pn">Jason Chavez</div>
+          <div class="pn">Jason Graber</div><div class="pn">Jeremiah Zazueta</div><div class="pn">Jim Ed Eichhorst</div>
+          <div class="pn">John Chavez</div><div class="pn">Justin Koontz</div><div class="pn">Lethan Olvera</div>
+          <div class="pn">Marcelina Martinez</div><div class="pn">Michael Montoya</div><div class="pn">Michael Vento</div>
+          <div class="pn">Mike Gallagher</div><div class="pn">Nick Pecora</div><div class="pn">OJ Marquez</div>
+          <div class="pn">PJ Parton</div><div class="pn">Richard Salas</div><div class="pn">Roman Lueras</div>
+          <div class="pn">Shay Demmons</div><div class="pn">Strat Nellos</div><div class="pn">Toby Reese</div>
+          <div class="pn">Whitney Wingfield</div><div class="pn">Jacque Ayala</div>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Bridesmaids & Ushers</div>
-        <div style="margin-bottom:12px">
-          <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.5px">BRIDESMAIDS</div>
-          <div class="party-name">Ashley — Matron of Honor</div>
-          <div class="party-name">Amber</div><div class="party-name">Nicki</div><div class="party-name">Juanice</div>
-        </div>
-        <div style="margin-bottom:12px">
-          <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.5px">USHERS</div>
-          <div class="party-name">Braden (Erica's brother)</div>
-          <div class="party-name">David</div>
-        </div>
-        <div style="border-top:.5px solid var(--border);padding-top:10px">
-          <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.5px">BRIDESMAID GIFT IDEAS</div>
-          <div class="party-name">Longchamp Bag (Ashley)</div>
-          <div class="party-name">Le Labo Candle</div>
-          <div class="party-name">Salt & Stone Lotion</div>
-          <div class="party-name">Scarf/Shawl — day of wedding</div>
-          <div class="party-name">Bracelet — day of wedding</div>
-          <div class="party-name">Getting ready outfits / custom sweats</div>
-        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">Bridesmaids & Ushers</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.5px">BRIDESMAIDS</div>
+        <div class="pn">Ashley — Matron of Honor</div><div class="pn">Amber</div><div class="pn">Nicki</div><div class="pn">Juanice</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin:10px 0 5px;letter-spacing:.5px">USHERS</div>
+        <div class="pn">Braden (Erica's brother)</div><div class="pn">David</div>
+        <div style="font-size:11px;font-weight:600;color:var(--text2);margin:10px 0 5px;letter-spacing:.5px">BRIDESMAID GIFT IDEAS</div>
+        <div class="pn">Longchamp Bag (Ashley)</div><div class="pn">Le Labo Candle</div>
+        <div class="pn">Salt & Stone Lotion</div><div class="pn">Scarf/Shawl — day of</div>
+        <div class="pn">Bracelet — day of</div><div class="pn">Getting ready outfits / custom sweats</div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">Hair & Makeup costs</div>
-      <table class="vtable">
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px">Hair & Makeup costs</div>
+      <table class="vt">
         <thead><tr><th>Person</th><th>Event</th><th>Cost</th></tr></thead>
         <tbody>
           <tr><td>Erica</td><td>Rehearsal / Welcome Party</td><td>$300</td></tr>
@@ -351,611 +291,252 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <!-- DAY-OF -->
   <div class="panel" id="panel-dayof">
     <div class="card">
       <div class="hint">Click status to cycle · Click any text to edit · Add items below</div>
-      <div id="schedList"><div class="loading"><div class="spinner"></div>Loading...</div></div>
-      <div class="add-row">
-        <input type="text" id="newSchedTime" placeholder="Time" style="width:90px;flex:none" />
-        <input type="text" id="newSchedLabel" placeholder="Description" />
-        <input type="text" id="newSchedDetail" placeholder="Details / location" />
-        <button onclick="addSchedItem()">+ Add</button>
+      <div id="schedList"><div class="ld"><div class="sp"></div>Loading...</div></div>
+      <div class="ar">
+        <input type="text" id="nST" placeholder="Time" style="width:90px;flex:none" />
+        <input type="text" id="nSL" placeholder="Description" />
+        <input type="text" id="nSD" placeholder="Details / location" />
+        <button onclick="addSched()">+ Add</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://dijvrahfsugzalvqfjki.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_o49Y5i78DXE35Mf-O4Kd_w_ouqAvX1M';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SURL = 'https://dijvrahfsugzalvqfjki.supabase.co';
+const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRpanZyYWhmc3VnemFsdnFmamtpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NjAxNjUsImV4cCI6MjA5MjAzNjE2NX0.c9pxwF40kihV0ADRXw_DWZCD7KsBaCWlikg4ZCckk3Q';
+const sb = supabase.createClient(SURL, SKEY);
 
 // Countdown
 const diff = Math.ceil((new Date('2026-09-18') - new Date()) / 86400000);
 document.getElementById('daysOut').textContent = diff > 0 ? diff : 0;
 
-const BAR_COLORS = ['#1B2A4A','#6B4226','#C9A84C','#6D1A2A','#1B2A4A','#6B4226','#C9A84C','#6D1A2A','#185FA5','#3B6D11'];
-const CAT_COLORS = {'Florals & Décor':'#6D1A2A','Swag & Favors':'#C9A84C','Welcome Bags':'#1B2A4A','Signage & Stationery':'#6B4226','Wedding Party Gifts':'#8B5E8B','Venues & Vendors':'#185FA5','Food & Drink':'#3B6D11','Day-of Logistics':'#5F5E5A','Rentals':'#888780'};
-const DOT = {done:'#639922',open:'#BA7517',future:'#888780'};
-const TL_STATUSES = ['future','open','done'];
-const V_STATUSES = ['completed','working','not-completed'];
+const BAR_COLORS=['#1B2A4A','#6B4226','#C9A84C','#6D1A2A','#1B2A4A','#6B4226','#C9A84C','#6D1A2A','#185FA5','#3B6D11'];
+const CAT_COLORS={'Florals & Décor':'#6D1A2A','Swag & Favors':'#C9A84C','Welcome Bags':'#1B2A4A','Signage & Stationery':'#6B4226','Wedding Party Gifts':'#8B5E8B','Venues & Vendors':'#185FA5','Food & Drink':'#3B6D11','Day-of Logistics':'#5F5E5A','Rentals':'#888780'};
+const DOT={done:'#639922',open:'#BA7517',future:'#888780'};
+const TLS=['future','open','done'];
+const VS=['completed','working','not-completed'];
+const VL={completed:'completed',working:'working','not-completed':'not done'};
 
-let taskFilter = 'all', shopFilter = 'all';
-let saveTimer = null;
+let tasks=[],budget=[],timeline=[],shopping=[],vendors=[],schedule=[];
+let tFilter='all',sFilter='all';
+let saveT=null;
 
-function showSave(msg='Saved'){
-  const el = document.getElementById('saveInd');
-  el.textContent = '✓ ' + msg;
-  el.style.opacity = '1';
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{ el.style.opacity='0'; }, 2500);
+function showSave(m='Saved'){
+  const el=document.getElementById('saveInd');
+  el.textContent='✓ '+m; el.style.opacity='1';
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{el.style.opacity='0';},2500);
 }
 
-function switchTab(name, btn){
+function switchTab(n,btn){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('panel-'+n).classList.add('active');
 }
 
-// ── SEED DATA ──
-const SEED_TASKS = [
-  {text:'Finalize wedding hashtag for signage',priority:'urgent',done:false},
-  {text:'Mail invitations (target: early June)',priority:'urgent',done:false},
-  {text:'Confirm first dance song with Jasper',priority:'urgent',done:false},
-  {text:'Order monogrammed bridesmaid makeup bags (long lead time)',priority:'urgent',done:false},
-  {text:'Order monogrammed groomsmen toiletry bags (long lead time)',priority:'urgent',done:false},
-  {text:'Order custom western wild rag scarves (~150 units)',priority:'urgent',done:false},
-  {text:'Confirm details card wording & order invitations — 135–140 qty (127 addresses: 115 stamp-ready, 12 unconfirmed)',priority:'urgent',done:false},
-  {text:'Figure out how to address invitation envelopes using the Cricut',priority:'urgent',done:false},
-  {text:'Call Mulas to confirm farewell brunch reservation',priority:'soon',done:false},
-  {text:"Coordinate Loren's birthday cake at Mulas",priority:'soon',done:false},
-  {text:'Resolve tent layout catering corridor conflict (B7/B8/B9)',priority:'soon',done:false},
-  {text:'Order gold mirrored acrylic drink stirrers (Jenn & Jules)',priority:'soon',done:false},
-  {text:'Order leatherette laser-engraved coozies (~40–50 units)',priority:'soon',done:false},
-  {text:'Order navy/gold foil matchboxes',priority:'soon',done:false},
-  {text:'Order linen hemstitch tea towels with monogram (qty 30)',priority:'soon',done:false},
-  {text:'Order dark walnut Mr. & Mrs. Koontz chair signs',priority:'soon',done:false},
-  {text:'Assemble welcome bags (136 out-of-town guests; ~20–35 bags)',priority:'soon',done:false},
-  {text:'Order NM welcome bag items (piñon nuts, salsa, coffee, chocolates, biscochitos)',priority:'soon',done:false},
-  {text:'Confirm Cold Sparks machines vendor (Jasper)',priority:'soon',done:false},
-  {text:'Confirm transportation vendor (Jasper) — Star Luxury or Santa Fe Valet',priority:'soon',done:false},
-  {text:'Confirm day-of staff',priority:'soon',done:false},
-  {text:'Confirm Sandia Bar reservation details (Jasper)',priority:'soon',done:false},
-  {text:'Set RSVP deadline reminders (Aug 1)',priority:'later',done:false},
-  {text:'Finalize seating chart / table assignments (25 table names assigned)',priority:'later',done:false},
-  {text:'Flower Moxie order — Moody Scarlet collection',priority:'later',done:false},
-  {text:'Practice first dance (solo + partnered sessions)',priority:'later',done:false},
-  {text:'Finalize signage for all venues (Makers List)',priority:'later',done:false},
-  {text:'Purchase: baskets, silver bowls, umbrellas, drink dispensers for Jeep',priority:'later',done:false},
-  {text:'Purchase: rugs, lanterns, blankets for atmosphere décor',priority:'later',done:false},
-  {text:'Complete bridesmaid gift bag planning',priority:'later',done:false},
-];
-
-const SEED_BUDGET = [
-  {label:'Tent & Rentals (AA Events)',spent:0,total:7428,sort_order:0},
-  {label:'Florals (Flower Moxie)',spent:0,total:2204,sort_order:1},
-  {label:'Hair & Makeup (Leiah Scheibel)',spent:600,total:1900,sort_order:2},
-  {label:'Swag & favors',spent:0,total:1800,sort_order:3},
-  {label:'Welcome bags',spent:0,total:900,sort_order:4},
-  {label:'Signage & stationery',spent:0,total:600,sort_order:5},
-  {label:'Bridesmaid gifts',spent:0,total:750,sort_order:6},
-  {label:'Groomsmen gifts (29 people)',spent:0,total:1450,sort_order:7},
-  {label:'Décor / table items',spent:0,total:1180,sort_order:8},
-  {label:'Misc / buffer',spent:0,total:500,sort_order:9},
-];
-
-const SEED_TIMELINE = [
-  {date:'Now',title:'Finalize invitations & order swag items',detail:'Hashtag, details card, scarf order, monogram bags',status:'open',sort_order:0},
-  {date:'Early June',title:'Mail invitations',detail:'Cards and Pockets imperial blue envelopes · RSVP deadline Aug 1',status:'open',sort_order:1},
-  {date:'July',title:'Follow up on swag orders',detail:'Coozies, stirrers, matchboxes, tea towels, chair signs',status:'future',sort_order:2},
-  {date:'Aug 1',title:'RSVP deadline',detail:'Final headcount for caterer and seating chart',status:'future',sort_order:3},
-  {date:'Late Aug',title:'Finalize seating chart',detail:'25 table names assigned (Zihua, South Park, Discovery Bay…)',status:'future',sort_order:4},
-  {date:'Late Aug',title:'Assemble welcome bags',detail:'136 out-of-town guests flagged; ~20–35 bags budgeted',status:'future',sort_order:5},
-  {date:'Sept 17',title:'Rehearsal dinner + Welcome party',detail:'Indigo Crow Cafe (rehearsal) · Sandia Bar (welcome party)',status:'future',sort_order:6},
-  {date:'Sept 18',title:'Wedding day — Ceremony 4:00 PM',detail:'Trees of Corrales · Officiant: Jerry Pope',status:'future',sort_order:7},
-  {date:'Sept 18',title:'Cocktail hour 4:30–5:30 · Dinner 6–7 · DJ 7–10',detail:'Late night snack 8:45 · Desserts 7:15',status:'future',sort_order:8},
-  {date:'Sept 19',title:'After party',detail:'Sandia Bar',status:'future',sort_order:9},
-  {date:'Sept 20',title:"Farewell brunch + Loren's 80th",detail:'Mulas — brunch & birthday celebration',status:'future',sort_order:10},
-];
-
-const SEED_VENDORS = [
-  {service:'Tent & Rentals',vendor:'AA Events',responsible:'Jasper/Erica',notes:'Deposit needed',status:'completed'},
-  {service:'Porta Potties',vendor:'505 Portable Restrooms',responsible:'Jasper',notes:'3-room trailer booked',status:'completed'},
-  {service:'Caterer',vendor:'City Events',responsible:'Erica',notes:'~220 guests',status:'completed'},
-  {service:'Photographer',vendor:'Natalie Lynn',responsible:'Erica',notes:'$320 deposit paid',status:'completed'},
-  {service:'Videographer',vendor:'Logan Chavez',responsible:'Jasper',notes:'Deposit needed',status:'completed'},
-  {service:'Bar',vendor:'ABQ Barkeeps',responsible:'Jasper',notes:'Quote requested',status:'completed'},
-  {service:'Valet',vendor:'Precision Parking',responsible:'Jasper',notes:'Tentatively booked — confirm',status:'working'},
-  {service:'DJ',vendor:'Boo / Eric Strauss',responsible:'Jasper',notes:'Booked, 7–10 PM',status:'completed'},
-  {service:'Cellist',vendor:'Ryan Smith Cello',responsible:'Erica',notes:'3:30–5:30 PM ceremony',status:'completed'},
-  {service:'Florist / Flowers',vendor:'Flower Moxie (DIY)',responsible:'Erica',notes:'Moody Scarlet collection',status:'completed'},
-  {service:'Sandia Bar Reservation',vendor:'Sandia Bar',responsible:'Jasper',notes:'Confirm details',status:'working'},
-  {service:'Rehearsal Dinner',vendor:'Indigo Crow',responsible:'Anne',notes:'Sept 17',status:'completed'},
-  {service:'Day-of Staff',vendor:'TBD',responsible:'',notes:'Still needed',status:'not-completed'},
-  {service:'Hair & Makeup',vendor:'Leiah Scheibel',responsible:'Erica',notes:'$600 deposit paid',status:'completed'},
-  {service:'Cold Sparks Machines',vendor:'TBD',responsible:'Jasper',notes:'Not yet booked',status:'not-completed'},
-  {service:'Transportation',vendor:'TBD',responsible:'Jasper',notes:'Star Luxury or Santa Fe Valet',status:'not-completed'},
-  {service:'Hotel Block',vendor:'Santa Ana Star',responsible:'Erica',notes:'Confirmed',status:'completed'},
-  {service:'Invitations',vendor:'TBD',responsible:'Erica',notes:'135–140 qty needed',status:'not-completed'},
-  {service:'Signage',vendor:'DIY + vendors',responsible:'Erica',notes:'In progress',status:'not-completed'},
-];
-
-const SEED_SCHEDULE = [
-  {time:'3:30 PM',label:'Cello pre-ceremony music begins',detail:'Pre-ceremony songs',status:'future',sort_order:0},
-  {time:'4:00 PM',label:'Ceremony',detail:'Officiant: Jerry Pope · Chairs, flowers, microphone',status:'future',sort_order:1},
-  {time:'4:30 PM',label:'Cocktail hour begins',detail:'Forest north of house · High tops, bar, cello continues',status:'future',sort_order:2},
-  {time:'5:30 PM',label:'Cocktail hour ends / outfit change',detail:'',status:'future',sort_order:3},
-  {time:'6:00 PM',label:'Dinner / reception begins',detail:'Tent',status:'future',sort_order:4},
-  {time:'6:45 PM',label:'Speeches',detail:'Braden & Amber Enstad toasting',status:'future',sort_order:5},
-  {time:'7:00 PM',label:'DJ begins',detail:'Boo / Eric Strauss · 7:00–10:00 PM',status:'future',sort_order:6},
-  {time:'7:15 PM',label:'Desserts out / wrap buffet',detail:'Wedding cake',status:'future',sort_order:7},
-  {time:'8:45 PM',label:'Late night snack',detail:'',status:'future',sort_order:8},
-  {time:'10:00 PM',label:'Reception ends',detail:'After party at Sandia Bar',status:'future',sort_order:9},
-];
-
-const SEED_SHOPPING = [
-  {category:'Florals & Décor',item:'Moody Scarlet wholesale florals',vendor:'Flower Moxie',qty:'Full order',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Yellow roses — boutonnieres (29 groomsmen + 2 ushers)',vendor:'Flower Moxie',qty:'40 stems',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Denim table runners',vendor:'Etsy / fabric vendor',qty:'Per table count',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Antique silver bud vases',vendor:'Etsy / thrift',qty:'~200 total',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Mixed brown taper candles',vendor:'Amazon / Etsy',qty:'~200',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Silver candle holders ($0.75ea, Amazon 20-pack)',vendor:'Amazon',qty:'200',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Silver chargers ($1.83ea)',vendor:'Amazon',qty:'200',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'White taper candles',vendor:'Amazon / bulk',qty:'200',urgency:'later',done:false},
-  {category:'Florals & Décor',item:'Clear vases for banquet tables',vendor:'Amazon',qty:'Banquet tables only',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Silver vases for round tables (Amazon 10-pack $109.99)',vendor:'Amazon',qty:'Round tables',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Silver ice buckets for champagne ($15.73ea)',vendor:'Amazon',qty:'~25 units',urgency:'later',done:false},
-  {category:'Florals & Décor',item:'Glass hurricanes (Dollar Tree $3ea)',vendor:'Dollar Tree',qty:'5 per table',urgency:'later',done:false},
-  {category:'Florals & Décor',item:'Leather table number tags',vendor:'DIY / laser engraving',qty:'Per table count',urgency:'soon',done:false},
-  {category:'Florals & Décor',item:'Umbrellas (aisle entry umbrella station)',vendor:'TBD',qty:'TBD',urgency:'later',done:false},
-  {category:'Florals & Décor',item:'Baskets, silver bowls, rugs, lanterns, blankets',vendor:'Amazon / Temu',qty:'Various',urgency:'later',done:false},
-  {category:'Swag & Favors',item:'Gold mirrored acrylic drink stirrers (cattle brand)',vendor:'Jenn & Jules Designs',qty:'Per bar needs',urgency:'urgent',done:false},
-  {category:'Swag & Favors',item:'Faux leatherette coozies (cattle brand)',vendor:'Etsy vendor',qty:'~40–50 units',urgency:'urgent',done:false},
-  {category:'Swag & Favors',item:'Navy/gold foil matchboxes (monogram)',vendor:'For Your Party / GB Design House',qty:'Bulk qty',urgency:'urgent',done:false},
-  {category:'Swag & Favors',item:'100% linen hemstitch tea towels — navy monogram',vendor:'Threads & Honey',qty:'30 units',urgency:'urgent',done:false},
-  {category:'Swag & Favors',item:'Dark walnut "Mr. & Mrs. Koontz" chair signs',vendor:'Etsy vendor',qty:'2',urgency:'soon',done:false},
-  {category:'Swag & Favors',item:'Custom 35" western wild rag scarves',vendor:'Crafty Bandanas / 4inBandana',qty:'~150 units',urgency:'urgent',done:false},
-  {category:'Welcome Bags',item:'Roasted piñon nuts',vendor:'Local NM / Amazon',qty:'~30 bags',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Hatch green chile salsa',vendor:'Local NM / online',qty:'~30 bags',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Piñon coffee',vendor:'Piñon Coffee Co.',qty:'~30 bags',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Chile chocolate bars',vendor:'Kakawa Chocolate',qty:'~30 bags',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Biscochitos',vendor:'Local NM bakery',qty:'~30 bags',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Chapstick',vendor:'Amazon / bulk',qty:'~30 units',urgency:'soon',done:false},
-  {category:'Welcome Bags',item:'Bag / tote container',vendor:'TBD',qty:'~30 units',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Invitations (imperial blue envelopes — Cards & Pockets)',vendor:'Cards and Pockets',qty:'135–140 (127 on mailing list + buffer)',urgency:'urgent',done:false},
-  {category:'Signage & Stationery',item:'Details cards',vendor:'Canva Print',qty:'135–140',urgency:'urgent',done:false},
-  {category:'Signage & Stationery',item:'Corrales Road yard sign ($30/ea)',vendor:'Canva + local print',qty:'1–2',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Hashtag sign (finalize hashtag first)',vendor:'DIY — Canva',qty:'1',urgency:'urgent',done:false},
-  {category:'Signage & Stationery',item:'Bar 1 cocktail hour leather sign ($39)',vendor:'Amazon',qty:'1',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Bar 2 main bar leather sign (DIY)',vendor:'DIY',qty:'1',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Mirror sign "Hello Darling" (DIY)',vendor:'DIY',qty:'1',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Schedule sign / pallet signage (DIY)',vendor:'DIY',qty:'1',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Bathroom signs (Canva Print)',vendor:'Canva Print',qty:'3',urgency:'later',done:false},
-  {category:'Signage & Stationery',item:'Mr & Mrs Koontz chair signs ($20, leather + Cricut)',vendor:'Amazon',qty:'2',urgency:'soon',done:false},
-  {category:'Signage & Stationery',item:'Reserved aisle signs',vendor:'Canva',qty:'TBD',urgency:'later',done:false},
-  {category:'Signage & Stationery',item:'Ceremony fans',vendor:'TBD',qty:'Per guest count',urgency:'later',done:false},
-  {category:'Wedding Party Gifts',item:'Monogrammed leather toiletry bags — groomsmen (29)',vendor:'Etsy / leather vendor',qty:'29 units',urgency:'urgent',done:false},
-  {category:'Wedding Party Gifts',item:'Monogrammed makeup bags — bridesmaids (4)',vendor:'Etsy / vendor TBD',qty:'4 units',urgency:'urgent',done:false},
-  {category:'Wedding Party Gifts',item:'Longchamp bag (Ashley)',vendor:'Longchamp',qty:'1',urgency:'soon',done:false},
-  {category:'Wedding Party Gifts',item:'Le Labo candle',vendor:'Le Labo',qty:'4',urgency:'soon',done:false},
-  {category:'Wedding Party Gifts',item:'Salt & Stone lotion',vendor:'Salt & Stone',qty:'4',urgency:'soon',done:false},
-  {category:'Wedding Party Gifts',item:'Scarf/shawl — day of',vendor:'TBD',qty:'4',urgency:'soon',done:false},
-  {category:'Venues & Vendors',item:'Mulas — farewell brunch (confirm reservation)',vendor:'Mulas',qty:'Sept 20',urgency:'urgent',done:false},
-  {category:'Venues & Vendors',item:'Cold Sparks Machines',vendor:'TBD',qty:'TBD',urgency:'urgent',done:false},
-  {category:'Venues & Vendors',item:'Transportation',vendor:'Star Luxury / Santa Fe Valet',qty:'TBD',urgency:'urgent',done:false},
-  {category:'Venues & Vendors',item:'Day-of staff',vendor:'TBD',qty:'TBD',urgency:'soon',done:false},
-  {category:'Food & Drink',item:"Loren's 80th birthday cake",vendor:'Mulas / local bakery',qty:'1 cake',urgency:'soon',done:false},
-  {category:'Food & Drink',item:'Champagne for self-pour toast',vendor:'TBD',qty:'Per table',urgency:'later',done:false},
-  {category:'Rentals',item:'Clear tent 40×80 ($3,200)',vendor:'AA Events',qty:'Booked',urgency:'booked',done:false},
-  {category:'Rentals',item:'Tables: 12× 36" round, 16× 8\' banquet',vendor:'AA Events',qty:'Booked',urgency:'booked',done:false},
-  {category:'Rentals',item:'Chairs: 200 padded + 200 folding',vendor:'AA Events',qty:'Booked',urgency:'booked',done:false},
-  {category:'Rentals',item:'Dance floor 20×20 ($371.25)',vendor:'AA Events',qty:'Booked',urgency:'booked',done:false},
-  {category:'Day-of Logistics',item:'Floral arrangement tools (wire, tape, snips)',vendor:'Flower Moxie / Amazon',qty:'Full DIY kit',urgency:'soon',done:false},
-  {category:'Day-of Logistics',item:'Day-of emergency kit',vendor:'Amazon / drugstore',qty:'1 kit',urgency:'later',done:false},
-  {category:'Day-of Logistics',item:'Card box / gift table + Yeti cooler guest book sign',vendor:'Etsy / Scheels',qty:'1',urgency:'later',done:false},
-];
-
-// ── SEED DATABASE ──
-async function seedIfEmpty(){
-  const {data, error, count} = await sb.from('tasks').select('*',{count:'exact',head:true});
-  if(error) { console.error('DB error:', error); throw new Error('Cannot reach database: ' + error.message); }
-  if(count > 0) return;
-  await sb.from('tasks').insert(SEED_TASKS);
-  await sb.from('budget').insert(SEED_BUDGET);
-  await sb.from('timeline').insert(SEED_TIMELINE);
-  await sb.from('vendors').insert(SEED_VENDORS);
-  await sb.from('schedule').insert(SEED_SCHEDULE);
-  await sb.from('shopping').insert(SEED_SHOPPING);
+function metrics(){
+  const td=tasks.filter(t=>t.done).length,tt=tasks.length;
+  document.getElementById('mT').textContent=td+' / '+tt;
+  document.getElementById('mTP').textContent=(tt?Math.round(td/tt*100):0)+'% done';
+  const ts=budget.reduce((s,b)=>s+Number(b.spent),0),tb=budget.reduce((s,b)=>s+Number(b.total),0);
+  document.getElementById('mS').textContent='$'+Math.round(ts).toLocaleString();
+  document.getElementById('mSS').textContent='of $'+tb.toLocaleString()+' total';
+  document.getElementById('mR').textContent='$'+Math.round(tb-ts).toLocaleString();
+  document.getElementById('mRP').textContent=(tb?Math.round((tb-ts)/tb*100):0)+'% left';
+  const sd=shopping.filter(i=>i.done).length,st=shopping.length;
+  document.getElementById('mSh').textContent=sd+' / '+st;
+  document.getElementById('mShP').textContent=(st?Math.round(sd/st*100):0)+'% done';
 }
 
 // ── TASKS ──
-let tasks = [], taskFilter = 'all';
 async function loadTasks(){
-  const {data} = await sb.from('tasks').select('*').order('id');
-  tasks = data || [];
-  renderTasks();
+  const {data,error}=await sb.from('tasks').select('*').order('id');
+  if(error){document.getElementById('taskList').innerHTML='<div style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</div>';return;}
+  tasks=data||[];renderTasks();
 }
 function renderTasks(){
-  const show = tasks.filter(t => taskFilter==='done'?t.done : taskFilter==='all'?!t.done : !t.done&&t.priority===taskFilter);
-  document.getElementById('taskList').innerHTML = show.length
-    ? show.map(t=>`<div class="task-item ${t.done?'done':''}">
-        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="flex-shrink:0;margin-top:3px;cursor:pointer;accent-color:var(--navy)">
-        <span class="ttext" contenteditable="true" onblur="editTask(${t.id},this.textContent)">${t.text}</span>
-        <select class="task-sel" onchange="changeTaskPri(${t.id},this.value)">
-          <option value="urgent" ${t.priority==='urgent'?'selected':''}>urgent</option>
-          <option value="soon" ${t.priority==='soon'?'selected':''}>soon</option>
-          <option value="later" ${t.priority==='later'?'selected':''}>later</option>
-        </select>
-        <button class="del-btn" onclick="deleteTask(${t.id})">×</button>
-      </div>`).join('')
-    : '<div style="font-size:13px;color:var(--text2);padding:12px 0">Nothing here.</div>';
-  updateMetrics();
+  const show=tasks.filter(t=>tFilter==='done'?t.done:tFilter==='all'?!t.done:!t.done&&t.priority===tFilter);
+  document.getElementById('taskList').innerHTML=show.length?show.map(t=>`<div class="ti ${t.done?'done':''}">
+    <input type="checkbox" ${t.done?'checked':''} onchange="togTask(${t.id})" style="flex-shrink:0;margin-top:3px;cursor:pointer;accent-color:var(--navy)">
+    <span class="tt" contenteditable="true" onblur="editTask(${t.id},this.textContent)">${t.text}</span>
+    <select class="tsel" onchange="chTaskP(${t.id},this.value)">
+      <option value="urgent" ${t.priority==='urgent'?'selected':''}>urgent</option>
+      <option value="soon" ${t.priority==='soon'?'selected':''}>soon</option>
+      <option value="later" ${t.priority==='later'?'selected':''}>later</option>
+    </select>
+    <button class="del" onclick="delTask(${t.id})">×</button>
+  </div>`).join(''):'<div style="font-size:13px;color:var(--text2);padding:12px 0">Nothing here.</div>';
+  metrics();
 }
-async function toggleTask(id){
-  const t=tasks.find(x=>x.id===id); if(!t) return;
-  t.done=!t.done;
-  renderTasks();
-  await sb.from('tasks').update({done:t.done}).eq('id',id);
-  showSave();
-}
-async function editTask(id,val){
-  if(!val.trim()) return;
-  await sb.from('tasks').update({text:val.trim()}).eq('id',id);
-  tasks.find(x=>x.id===id).text=val.trim();
-  showSave();
-}
-async function changeTaskPri(id,val){
-  await sb.from('tasks').update({priority:val}).eq('id',id);
-  tasks.find(x=>x.id===id).priority=val;
-  renderTasks(); showSave();
-}
-async function deleteTask(id){
-  tasks=tasks.filter(x=>x.id!==id);
-  renderTasks();
-  await sb.from('tasks').delete().eq('id',id);
-  showSave();
-}
-function filterTasks(f,btn){
-  taskFilter=f;
-  document.querySelectorAll('#taskPills .pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTasks();
-}
-async function addTask(){
-  const text=document.getElementById('newTaskText').value.trim();
-  if(!text) return;
-  const {data}=await sb.from('tasks').insert({text,priority:document.getElementById('newTaskPri').value,done:false}).select().single();
-  tasks.push(data);
-  document.getElementById('newTaskText').value='';
-  renderTasks(); showSave();
-}
+async function togTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;renderTasks();await sb.from('tasks').update({done:t.done}).eq('id',id);showSave();}
+async function editTask(id,v){if(!v.trim())return;await sb.from('tasks').update({text:v.trim()}).eq('id',id);tasks.find(x=>x.id===id).text=v.trim();showSave();}
+async function chTaskP(id,v){await sb.from('tasks').update({priority:v}).eq('id',id);tasks.find(x=>x.id===id).priority=v;renderTasks();showSave();}
+async function delTask(id){tasks=tasks.filter(x=>x.id!==id);renderTasks();await sb.from('tasks').delete().eq('id',id);showSave();}
+function fTasks(f,btn){tFilter=f;document.querySelectorAll('#tPills .pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTasks();}
+async function addTask(){const t=document.getElementById('nTT').value.trim();if(!t)return;const{data}=await sb.from('tasks').insert({text:t,priority:document.getElementById('nTP').value,done:false}).select().single();tasks.push(data);document.getElementById('nTT').value='';renderTasks();showSave();}
 
 // ── BUDGET ──
-let budget=[];
 async function loadBudget(){
-  const {data}=await sb.from('budget').select('*').order('sort_order');
-  budget=data||[];
-  renderBudget();
+  const {data,error}=await sb.from('budget').select('*').order('sort_order');
+  if(error){document.getElementById('budgetList').innerHTML='<div style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</div>';return;}
+  budget=data||[];renderBudget();
 }
 function renderBudget(){
   document.getElementById('budgetList').innerHTML=budget.map((b,i)=>{
     const pct=b.total>0?Math.min(100,Math.round(b.spent/b.total*100)):0;
-    const over=b.spent>b.total;
-    return `<div class="bline">
-      <span class="blabel" contenteditable="true" onblur="editBLabel(${b.id},this.textContent)">${b.label}</span>
-      <div class="bbar-wrap"><div class="bbar" style="width:${pct}%;background:${over?'#A32D2D':BAR_COLORS[i%BAR_COLORS.length]}"></div></div>
-      <input class="num-input" type="number" value="${b.spent}" min="0" onchange="updateSpent(${b.id},this.value)" title="Spent" />
-      <span class="bamts">/ </span>
-      <input class="num-input" type="number" value="${b.total}" min="0" onchange="updateTotal(${b.id},this.value)" title="Budget" />
-      <button class="del-btn" onclick="deleteBCat(${b.id})">×</button>
+    const over=Number(b.spent)>Number(b.total);
+    return `<div class="bl">
+      <span class="blb" contenteditable="true" onblur="editBL(${b.id},this.textContent)">${b.label}</span>
+      <div class="bw"><div class="bf" style="width:${pct}%;background:${over?'#A32D2D':BAR_COLORS[i%BAR_COLORS.length]}"></div></div>
+      <input class="ni" type="number" value="${b.spent}" min="0" onchange="upSpent(${b.id},this.value)" />
+      <span class="bamt">/ </span>
+      <input class="ni" type="number" value="${b.total}" min="0" onchange="upTotal(${b.id},this.value)" />
+      <button class="del" onclick="delBCat(${b.id})">×</button>
     </div>`;
   }).join('');
-  const ts=budget.reduce((s,b)=>s+Number(b.spent),0), tt=budget.reduce((s,b)=>s+Number(b.total),0);
-  document.getElementById('budgetTotal').textContent=`$${Math.round(ts).toLocaleString()} spent / $${tt.toLocaleString()} budgeted`;
-  updateMetrics();
+  const ts=budget.reduce((s,b)=>s+Number(b.spent),0),tt=budget.reduce((s,b)=>s+Number(b.total),0);
+  document.getElementById('bTot').textContent='$'+Math.round(ts).toLocaleString()+' spent / $'+tt.toLocaleString()+' budgeted';
+  metrics();
 }
-async function editBLabel(id,val){
-  if(!val.trim()) return;
-  await sb.from('budget').update({label:val.trim()}).eq('id',id);
-  budget.find(x=>x.id===id).label=val.trim();
-  showSave();
-}
-async function updateSpent(id,val){
-  const v=Math.max(0,parseFloat(val)||0);
-  await sb.from('budget').update({spent:v}).eq('id',id);
-  budget.find(x=>x.id===id).spent=v;
-  renderBudget(); showSave();
-}
-async function updateTotal(id,val){
-  const v=Math.max(0,parseFloat(val)||0);
-  await sb.from('budget').update({total:v}).eq('id',id);
-  budget.find(x=>x.id===id).total=v;
-  renderBudget(); showSave();
-}
-async function deleteBCat(id){
-  budget=budget.filter(x=>x.id!==id);
-  renderBudget();
-  await sb.from('budget').delete().eq('id',id);
-  showSave();
-}
-async function addBudgetCat(){
-  const label=document.getElementById('newBCat').value.trim();
-  const total=parseFloat(document.getElementById('newBTotal').value)||0;
-  if(!label) return;
-  const {data}=await sb.from('budget').insert({label,spent:0,total,sort_order:budget.length}).select().single();
-  budget.push(data);
-  document.getElementById('newBCat').value='';
-  document.getElementById('newBTotal').value='';
-  renderBudget(); showSave();
-}
+async function editBL(id,v){if(!v.trim())return;await sb.from('budget').update({label:v.trim()}).eq('id',id);budget.find(x=>x.id===id).label=v.trim();showSave();}
+async function upSpent(id,v){const n=Math.max(0,parseFloat(v)||0);await sb.from('budget').update({spent:n}).eq('id',id);budget.find(x=>x.id===id).spent=n;renderBudget();showSave();}
+async function upTotal(id,v){const n=Math.max(0,parseFloat(v)||0);await sb.from('budget').update({total:n}).eq('id',id);budget.find(x=>x.id===id).total=n;renderBudget();showSave();}
+async function delBCat(id){budget=budget.filter(x=>x.id!==id);renderBudget();await sb.from('budget').delete().eq('id',id);showSave();}
+async function addBCat(){const l=document.getElementById('nBC').value.trim();if(!l)return;const t=parseFloat(document.getElementById('nBT').value)||0;const{data}=await sb.from('budget').insert({label:l,spent:0,total:t,sort_order:budget.length}).select().single();budget.push(data);document.getElementById('nBC').value='';document.getElementById('nBT').value='';renderBudget();showSave();}
 
 // ── TIMELINE ──
-let timeline=[];
 async function loadTimeline(){
-  const {data}=await sb.from('timeline').select('*').order('sort_order');
-  timeline=data||[];
-  renderTimeline();
+  const {data,error}=await sb.from('timeline').select('*').order('sort_order');
+  if(error){document.getElementById('timelineList').innerHTML='<div style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</div>';return;}
+  timeline=data||[];renderTimeline();
 }
 function renderTimeline(){
-  document.getElementById('timelineList').innerHTML=timeline.map((t,i)=>`
-    <div class="tli">
-      <span class="tli-date" contenteditable="true" onblur="editTL(${t.id},'date',this.textContent)">${t.date}</span>
-      <div class="tli-dot" style="background:${DOT[t.status]||'#888'}"></div>
-      <div class="tli-body">
-        <div class="tli-title" contenteditable="true" onblur="editTL(${t.id},'title',this.textContent)">${t.title}</div>
-        <div class="tli-detail" contenteditable="true" onblur="editTL(${t.id},'detail',this.textContent)">${t.detail}</div>
-      </div>
-      <span class="tli-st b-${t.status}" onclick="cycleTL(${t.id})">${t.status==='open'?'action needed':t.status==='done'?'done':'upcoming'}</span>
-      <button class="del-btn" onclick="deleteTL(${t.id})">×</button>
-    </div>`).join('');
+  document.getElementById('timelineList').innerHTML=timeline.map(t=>`<div class="tli">
+    <span class="tld" contenteditable="true" onblur="editTL(${t.id},'date',this.textContent)">${t.date}</span>
+    <div class="tldot" style="background:${DOT[t.status]||'#888'}"></div>
+    <div class="tlb">
+      <div class="tlt" contenteditable="true" onblur="editTL(${t.id},'title',this.textContent)">${t.title}</div>
+      <div class="tldt" contenteditable="true" onblur="editTL(${t.id},'detail',this.textContent)">${t.detail}</div>
+    </div>
+    <span class="tlst badge b-${t.status}" onclick="cycTL(${t.id})">${t.status==='open'?'action needed':t.status==='done'?'done':'upcoming'}</span>
+    <button class="del" onclick="delTL(${t.id})">×</button>
+  </div>`).join('');
 }
-async function editTL(id,field,val){
-  if(!val.trim()) return;
-  await sb.from('timeline').update({[field]:val.trim()}).eq('id',id);
-  const t=timeline.find(x=>x.id===id); if(t) t[field]=val.trim();
-  showSave();
-}
-async function cycleTL(id){
-  const t=timeline.find(x=>x.id===id); if(!t) return;
-  t.status=TL_STATUSES[(TL_STATUSES.indexOf(t.status)+1)%TL_STATUSES.length];
-  await sb.from('timeline').update({status:t.status}).eq('id',id);
-  renderTimeline(); showSave();
-}
-async function deleteTL(id){
-  timeline=timeline.filter(x=>x.id!==id);
-  renderTimeline();
-  await sb.from('timeline').delete().eq('id',id);
-  showSave();
-}
-async function addTLItem(){
-  const date=document.getElementById('newTLDate').value.trim();
-  const title=document.getElementById('newTLTitle').value.trim();
-  if(!title) return;
-  const detail=document.getElementById('newTLDetail').value.trim();
-  const {data}=await sb.from('timeline').insert({date:date||'TBD',title,detail,status:'future',sort_order:timeline.length}).select().single();
-  timeline.push(data);
-  ['newTLDate','newTLTitle','newTLDetail'].forEach(id=>document.getElementById(id).value='');
-  renderTimeline(); showSave();
-}
+async function editTL(id,f,v){if(!v.trim())return;await sb.from('timeline').update({[f]:v.trim()}).eq('id',id);const t=timeline.find(x=>x.id===id);if(t)t[f]=v.trim();showSave();}
+async function cycTL(id){const t=timeline.find(x=>x.id===id);if(!t)return;t.status=TLS[(TLS.indexOf(t.status)+1)%TLS.length];await sb.from('timeline').update({status:t.status}).eq('id',id);renderTimeline();showSave();}
+async function delTL(id){timeline=timeline.filter(x=>x.id!==id);renderTimeline();await sb.from('timeline').delete().eq('id',id);showSave();}
+async function addTL(){const ti=document.getElementById('nTLT').value.trim();if(!ti)return;const{data}=await sb.from('timeline').insert({date:document.getElementById('nTLD').value.trim()||'TBD',title:ti,detail:document.getElementById('nTLDt').value.trim()||'',status:'future',sort_order:timeline.length}).select().single();timeline.push(data);['nTLD','nTLT','nTLDt'].forEach(i=>document.getElementById(i).value='');renderTimeline();showSave();}
 
 // ── SHOPPING ──
-let shopItems=[], shopFilter='all';
 async function loadShopping(){
-  const {data}=await sb.from('shopping').select('*').order('id');
-  shopItems=data||[];
-  renderShopping();
+  const {data,error}=await sb.from('shopping').select('*').order('id');
+  if(error){document.getElementById('shopList').innerHTML='<div style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</div>';return;}
+  shopping=data||[];renderShopping();
 }
-function filterShop(f,btn){
-  shopFilter=f;
-  document.querySelectorAll('#shopPills .pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderShopping();
-}
-function toggleCat(key){
-  const b=document.getElementById('sb_'+key), t=document.getElementById('st_'+key);
-  if(!b) return;
-  b.style.display=b.style.display==='none'?'':'none';
-  t.textContent=b.style.display==='none'?'▸':'▾';
-}
-async function toggleShop(id){
-  const i=shopItems.find(x=>x.id===id); if(!i) return;
-  i.done=!i.done;
-  renderShopping();
-  await sb.from('shopping').update({done:i.done}).eq('id',id);
-  showSave();
-}
-async function editShop(id,field,val){
-  if(!val.trim()) return;
-  await sb.from('shopping').update({[field]:val.trim()}).eq('id',id);
-  const i=shopItems.find(x=>x.id===id); if(i) i[field]=val.trim();
-  showSave();
-}
-async function changeShopUrg(id,val){
-  await sb.from('shopping').update({urgency:val}).eq('id',id);
-  const i=shopItems.find(x=>x.id===id); if(i) i.urgency=val;
-  renderShopping(); showSave();
-}
-async function deleteShop(id){
-  shopItems=shopItems.filter(x=>x.id!==id);
-  renderShopping();
-  await sb.from('shopping').delete().eq('id',id);
-  showSave();
-}
-async function addShopItem(){
-  const item=document.getElementById('siItem').value.trim(); if(!item) return;
-  const {data}=await sb.from('shopping').insert({
-    category:document.getElementById('siCat').value,
-    item, vendor:document.getElementById('siVendor').value.trim()||'—',
-    qty:document.getElementById('siQty').value.trim()||'—',
-    urgency:document.getElementById('siUrg').value, done:false
-  }).select().single();
-  shopItems.push(data);
-  ['siItem','siVendor','siQty'].forEach(id=>document.getElementById(id).value='');
-  renderShopping(); showSave();
-}
+function fShop(f,btn){sFilter=f;document.querySelectorAll('#sPills .pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderShopping();}
+function togCat(k){const b=document.getElementById('sb_'+k),t=document.getElementById('st_'+k);if(!b)return;b.style.display=b.style.display==='none'?'':'none';t.textContent=b.style.display==='none'?'▸':'▾';}
+async function togShop(id){const i=shopping.find(x=>x.id===id);if(!i)return;i.done=!i.done;renderShopping();await sb.from('shopping').update({done:i.done}).eq('id',id);showSave();}
+async function editShop(id,f,v){if(!v.trim())return;await sb.from('shopping').update({[f]:v.trim()}).eq('id',id);const i=shopping.find(x=>x.id===id);if(i)i[f]=v.trim();showSave();}
+async function chShopU(id,v){await sb.from('shopping').update({urgency:v}).eq('id',id);shopping.find(x=>x.id===id).urgency=v;renderShopping();showSave();}
+async function delShop(id){shopping=shopping.filter(x=>x.id!==id);renderShopping();await sb.from('shopping').delete().eq('id',id);showSave();}
+async function addShop(){const it=document.getElementById('siI').value.trim();if(!it)return;const{data}=await sb.from('shopping').insert({category:document.getElementById('siC').value,item:it,vendor:document.getElementById('siV').value.trim()||'—',qty:document.getElementById('siQ').value.trim()||'—',urgency:document.getElementById('siU').value,done:false}).select().single();shopping.push(data);['siI','siV','siQ'].forEach(i=>document.getElementById(i).value='');renderShopping();showSave();}
 function renderShopping(){
-  const filtered=shopFilter==='all'?shopItems:shopItems.filter(i=>i.urgency===shopFilter);
-  const cats=[...new Set(shopItems.map(i=>i.category))];
-  const root=document.getElementById('shopList'); root.innerHTML='';
+  const fil=sFilter==='all'?shopping:shopping.filter(i=>i.urgency===sFilter);
+  const cats=[...new Set(shopping.map(i=>i.category))];
+  const root=document.getElementById('shopList');root.innerHTML='';
   cats.forEach(cat=>{
-    const catItems=filtered.filter(i=>i.category===cat); if(!catItems.length) return;
-    const done=catItems.filter(i=>i.done).length;
+    const ci=fil.filter(i=>i.category===cat);if(!ci.length)return;
+    const done=ci.filter(i=>i.done).length;
     const color=CAT_COLORS[cat]||'#888';
-    const key=cat.replace(/[^a-z0-9]/gi,'_');
-    const block=document.createElement('div'); block.className='cat-block';
-    block.innerHTML=`<div class="cat-hdr" onclick="toggleCat('${key}')">
-      <div class="cat-dot" style="background:${color}"></div>
-      <span class="cat-name">${cat}</span>
-      <span class="cat-ct" style="margin-left:6px">${done}/${catItems.length} checked</span>
-      <span class="cat-tog" id="st_${key}">▾</span>
+    const k=cat.replace(/[^a-z0-9]/gi,'_');
+    const el=document.createElement('div');el.className='cb';
+    el.innerHTML=`<div class="ch" onclick="togCat('${k}')">
+      <div class="cdot" style="background:${color}"></div>
+      <span class="cn">${cat}</span>
+      <span class="cct" style="margin-left:6px">${done}/${ci.length} checked</span>
+      <span class="ctog" id="st_${k}">▾</span>
     </div>
-    <div id="sb_${key}" style="background:var(--bg);border:.5px solid var(--border);border-radius:10px;overflow:hidden;">
-      <table class="shop-table">
-        <thead><tr><th style="width:26px"></th><th>Item</th><th style="width:140px">Vendor</th><th style="width:120px">Qty/notes</th><th style="width:85px">Status</th><th style="width:22px"></th></tr></thead>
-        <tbody>${catItems.map(i=>`<tr class="${i.done?'checked':''}">
-          <td class="ns"><input type="checkbox" ${i.done?'checked':''} onchange="toggleShop(${i.id})" style="cursor:pointer;accent-color:var(--navy)"></td>
-          <td><span class="editable" contenteditable="true" onblur="editShop(${i.id},'item',this.textContent)">${i.item}</span></td>
-          <td><span class="editable" contenteditable="true" onblur="editShop(${i.id},'vendor',this.textContent)" style="color:var(--text2);font-size:12px">${i.vendor}</span></td>
-          <td><span class="editable" contenteditable="true" onblur="editShop(${i.id},'qty',this.textContent)" style="color:var(--text2);font-size:12px">${i.qty}</span></td>
-          <td class="ns"><select onchange="changeShopUrg(${i.id},this.value)" style="font-size:11px;padding:2px 4px;border:.5px solid var(--border);border-radius:5px;background:var(--bg);color:var(--text);font-family:inherit">
-            <option value="urgent" ${i.urgency==='urgent'?'selected':''}>urgent</option>
-            <option value="soon" ${i.urgency==='soon'?'selected':''}>soon</option>
-            <option value="later" ${i.urgency==='later'?'selected':''}>later</option>
-            <option value="booked" ${i.urgency==='booked'?'selected':''}>booked</option>
-            <option value="diy" ${i.urgency==='diy'?'selected':''}>diy</option>
-          </select></td>
-          <td class="ns"><button class="del-btn" onclick="deleteShop(${i.id})">×</button></td>
-        </tr>`).join('')}</tbody>
-      </table>
+    <div id="sb_${k}" style="background:var(--bg);border:.5px solid var(--border);border-radius:10px;overflow:hidden">
+      <table class="st"><thead><tr><th style="width:26px"></th><th>Item</th><th style="width:140px">Vendor</th><th style="width:120px">Qty/notes</th><th style="width:85px">Status</th><th style="width:22px"></th></tr></thead>
+      <tbody>${ci.map(i=>`<tr class="${i.done?'ck':''}">
+        <td class="ns"><input type="checkbox" ${i.done?'checked':''} onchange="togShop(${i.id})" style="cursor:pointer;accent-color:var(--navy)"></td>
+        <td><span class="ed" contenteditable="true" onblur="editShop(${i.id},'item',this.textContent)">${i.item}</span></td>
+        <td><span class="ed" contenteditable="true" onblur="editShop(${i.id},'vendor',this.textContent)" style="color:var(--text2);font-size:12px">${i.vendor}</span></td>
+        <td><span class="ed" contenteditable="true" onblur="editShop(${i.id},'qty',this.textContent)" style="color:var(--text2);font-size:12px">${i.qty}</span></td>
+        <td class="ns"><select onchange="chShopU(${i.id},this.value)" style="font-size:11px;padding:2px 4px;border:.5px solid var(--border);border-radius:5px;background:var(--bg);color:var(--text);font-family:inherit">
+          <option value="urgent" ${i.urgency==='urgent'?'selected':''}>urgent</option>
+          <option value="soon" ${i.urgency==='soon'?'selected':''}>soon</option>
+          <option value="later" ${i.urgency==='later'?'selected':''}>later</option>
+          <option value="booked" ${i.urgency==='booked'?'selected':''}>booked</option>
+          <option value="diy" ${i.urgency==='diy'?'selected':''}>diy</option>
+        </select></td>
+        <td class="ns"><button class="del" onclick="delShop(${i.id})">×</button></td>
+      </tr>`).join('')}</tbody></table>
     </div>`;
-    root.appendChild(block);
+    root.appendChild(el);
   });
-  updateMetrics();
+  metrics();
 }
 
 // ── VENDORS ──
-let vendors=[];
 async function loadVendors(){
-  const {data}=await sb.from('vendors').select('*').order('id');
-  vendors=data||[];
-  renderVendors();
+  const {data,error}=await sb.from('vendors').select('*').order('id');
+  if(error){document.getElementById('vBody').innerHTML='<tr><td colspan="6" style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</td></tr>';return;}
+  vendors=data||[];renderVendors();
 }
-const V_LABELS={completed:'completed',working:'working','not-completed':'not done'};
-async function cycleVendor(id){
-  const v=vendors.find(x=>x.id===id); if(!v) return;
-  v.status=V_STATUSES[(V_STATUSES.indexOf(v.status)+1)%V_STATUSES.length];
-  await sb.from('vendors').update({status:v.status}).eq('id',id);
-  renderVendors(); showSave();
-}
-async function editVendor(id,field,val){
-  if(!val.trim()) return;
-  await sb.from('vendors').update({[field]:val.trim()}).eq('id',id);
-  const v=vendors.find(x=>x.id===id); if(v) v[field]=val.trim();
-  showSave();
-}
-async function deleteVendor(id){
-  vendors=vendors.filter(x=>x.id!==id);
-  renderVendors();
-  await sb.from('vendors').delete().eq('id',id);
-  showSave();
-}
-async function addVendor(){
-  const service=document.getElementById('vService').value.trim(); if(!service) return;
-  const {data}=await sb.from('vendors').insert({
-    service, vendor:document.getElementById('vVendor').value.trim(),
-    responsible:document.getElementById('vResp').value.trim(),
-    notes:document.getElementById('vNotes').value.trim(),
-    status:document.getElementById('vStatus').value
-  }).select().single();
-  vendors.push(data);
-  ['vService','vVendor','vResp','vNotes'].forEach(id=>document.getElementById(id).value='');
-  renderVendors(); showSave();
-}
+async function cycVendor(id){const v=vendors.find(x=>x.id===id);if(!v)return;v.status=VS[(VS.indexOf(v.status)+1)%VS.length];await sb.from('vendors').update({status:v.status}).eq('id',id);renderVendors();showSave();}
+async function editVendor(id,f,v){if(!v.trim())return;await sb.from('vendors').update({[f]:v.trim()}).eq('id',id);vendors.find(x=>x.id===id)[f]=v.trim();showSave();}
+async function delVendor(id){vendors=vendors.filter(x=>x.id!==id);renderVendors();await sb.from('vendors').delete().eq('id',id);showSave();}
+async function addVendor(){const s=document.getElementById('vS').value.trim();if(!s)return;const{data}=await sb.from('vendors').insert({service:s,vendor:document.getElementById('vV').value.trim(),responsible:document.getElementById('vR').value.trim(),notes:document.getElementById('vN').value.trim(),status:document.getElementById('vSt').value}).select().single();vendors.push(data);['vS','vV','vR','vN'].forEach(i=>document.getElementById(i).value='');renderVendors();showSave();}
 function renderVendors(){
-  document.getElementById('vendorBody').innerHTML=vendors.map(v=>`<tr>
-    <td><span class="editable" contenteditable="true" onblur="editVendor(${v.id},'service',this.textContent)" style="font-weight:500">${v.service}</span></td>
-    <td><span class="editable" contenteditable="true" onblur="editVendor(${v.id},'vendor',this.textContent)" style="color:var(--text2)">${v.vendor||'—'}</span></td>
-    <td><span class="editable" contenteditable="true" onblur="editVendor(${v.id},'responsible',this.textContent)" style="color:var(--text2)">${v.responsible||'—'}</span></td>
-    <td><span class="editable" contenteditable="true" onblur="editVendor(${v.id},'notes',this.textContent)" style="color:var(--text2);font-size:12px">${v.notes||''}</span></td>
-    <td><span class="badge b-${v.status}" onclick="cycleVendor(${v.id})" style="cursor:pointer">${V_LABELS[v.status]||v.status}</span></td>
-    <td><button class="del-btn" onclick="deleteVendor(${v.id})">×</button></td>
+  document.getElementById('vBody').innerHTML=vendors.map(v=>`<tr>
+    <td><span class="ed" contenteditable="true" onblur="editVendor(${v.id},'service',this.textContent)" style="font-weight:500">${v.service}</span></td>
+    <td><span class="ed" contenteditable="true" onblur="editVendor(${v.id},'vendor',this.textContent)" style="color:var(--text2)">${v.vendor||'—'}</span></td>
+    <td><span class="ed" contenteditable="true" onblur="editVendor(${v.id},'responsible',this.textContent)" style="color:var(--text2)">${v.responsible||'—'}</span></td>
+    <td><span class="ed" contenteditable="true" onblur="editVendor(${v.id},'notes',this.textContent)" style="color:var(--text2);font-size:12px">${v.notes||''}</span></td>
+    <td><span class="badge b-${v.status}" onclick="cycVendor(${v.id})" style="cursor:pointer">${VL[v.status]||v.status}</span></td>
+    <td><button class="del" onclick="delVendor(${v.id})">×</button></td>
   </tr>`).join('');
 }
 
 // ── SCHEDULE ──
-let schedule=[];
 async function loadSchedule(){
-  const {data}=await sb.from('schedule').select('*').order('sort_order');
-  schedule=data||[];
-  renderSchedule();
+  const {data,error}=await sb.from('schedule').select('*').order('sort_order');
+  if(error){document.getElementById('schedList').innerHTML='<div style="color:var(--urgent);padding:12px;font-size:13px">Error: '+error.message+'</div>';return;}
+  schedule=data||[];renderSchedule();
 }
-async function cycleSchedStatus(id){
-  const s=schedule.find(x=>x.id===id); if(!s) return;
-  s.status=TL_STATUSES[(TL_STATUSES.indexOf(s.status)+1)%TL_STATUSES.length];
-  await sb.from('schedule').update({status:s.status}).eq('id',id);
-  renderSchedule(); showSave();
-}
-async function editSched(id,field,val){
-  if(!val.trim()) return;
-  await sb.from('schedule').update({[field]:val.trim()}).eq('id',id);
-  const s=schedule.find(x=>x.id===id); if(s) s[field]=val.trim();
-  showSave();
-}
-async function deleteSched(id){
-  schedule=schedule.filter(x=>x.id!==id);
-  renderSchedule();
-  await sb.from('schedule').delete().eq('id',id);
-  showSave();
-}
-async function addSchedItem(){
-  const label=document.getElementById('newSchedLabel').value.trim(); if(!label) return;
-  const {data}=await sb.from('schedule').insert({
-    time:document.getElementById('newSchedTime').value.trim()||'—',
-    label, detail:document.getElementById('newSchedDetail').value.trim()||'',
-    status:'future', sort_order:schedule.length
-  }).select().single();
-  schedule.push(data);
-  ['newSchedTime','newSchedLabel','newSchedDetail'].forEach(id=>document.getElementById(id).value='');
-  renderSchedule(); showSave();
-}
+async function cycSched(id){const s=schedule.find(x=>x.id===id);if(!s)return;s.status=TLS[(TLS.indexOf(s.status)+1)%TLS.length];await sb.from('schedule').update({status:s.status}).eq('id',id);renderSchedule();showSave();}
+async function editSched(id,f,v){if(!v.trim())return;await sb.from('schedule').update({[f]:v.trim()}).eq('id',id);schedule.find(x=>x.id===id)[f]=v.trim();showSave();}
+async function delSched(id){schedule=schedule.filter(x=>x.id!==id);renderSchedule();await sb.from('schedule').delete().eq('id',id);showSave();}
+async function addSched(){const l=document.getElementById('nSL').value.trim();if(!l)return;const{data}=await sb.from('schedule').insert({time:document.getElementById('nST').value.trim()||'—',label:l,detail:document.getElementById('nSD').value.trim()||'',status:'future',sort_order:schedule.length}).select().single();schedule.push(data);['nST','nSL','nSD'].forEach(i=>document.getElementById(i).value='');renderSchedule();showSave();}
 function renderSchedule(){
-  document.getElementById('schedList').innerHTML=schedule.map(s=>`<div class="sched-item">
-    <span class="sched-time" contenteditable="true" onblur="editSched(${s.id},'time',this.textContent)">${s.time}</span>
+  document.getElementById('schedList').innerHTML=schedule.map(s=>`<div class="sci">
+    <span class="sct" contenteditable="true" onblur="editSched(${s.id},'time',this.textContent)">${s.time}</span>
     <div style="flex:1">
-      <div class="sched-label" contenteditable="true" onblur="editSched(${s.id},'label',this.textContent)">${s.label}</div>
-      ${s.detail?`<div class="sched-detail" contenteditable="true" onblur="editSched(${s.id},'detail',this.textContent)">${s.detail}</div>`:''}
+      <div class="scl" contenteditable="true" onblur="editSched(${s.id},'label',this.textContent)">${s.label}</div>
+      ${s.detail?`<div class="scd" contenteditable="true" onblur="editSched(${s.id},'detail',this.textContent)">${s.detail}</div>`:''}
     </div>
-    <span class="badge b-${s.status}" onclick="cycleSchedStatus(${s.id})" style="cursor:pointer">${s.status==='open'?'action needed':s.status==='done'?'done':'upcoming'}</span>
-    <button class="del-btn" onclick="deleteSched(${s.id})">×</button>
+    <span class="badge b-${s.status}" onclick="cycSched(${s.id})" style="cursor:pointer">${s.status==='open'?'action needed':s.status==='done'?'done':'upcoming'}</span>
+    <button class="del" onclick="delSched(${s.id})">×</button>
   </div>`).join('');
-}
-
-// ── METRICS ──
-function updateMetrics(){
-  const td=tasks.filter(t=>t.done).length, tt=tasks.length;
-  document.getElementById('mTasks').textContent=`${td} / ${tt}`;
-  document.getElementById('mTasksPct').textContent=`${tt>0?Math.round(td/tt*100):0}% done`;
-  const ts=budget.reduce((s,b)=>s+Number(b.spent),0), tb=budget.reduce((s,b)=>s+Number(b.total),0);
-  document.getElementById('mSpent').textContent=`$${Math.round(ts).toLocaleString()}`;
-  document.getElementById('mSpentSub').textContent=`of $${tb.toLocaleString()} total`;
-  document.getElementById('mRem').textContent=`$${Math.round(tb-ts).toLocaleString()}`;
-  document.getElementById('mRemPct').textContent=`${tb>0?Math.round((tb-ts)/tb*100):0}% left`;
-  const sd=shopItems.filter(i=>i.done).length, st=shopItems.length;
-  document.getElementById('mShop').textContent=`${sd} / ${st}`;
-  document.getElementById('mShopPct').textContent=`${st>0?Math.round(sd/st*100):0}% done`;
 }
 
 // ── INIT ──
 async function init(){
   try {
-    await seedIfEmpty();
-    await Promise.all([loadTasks(),loadBudget(),loadTimeline(),loadShopping(),loadVendors(),loadSchedule()]);
-  } catch(err) {
-    console.error('Init failed:', err);
-    document.querySelectorAll('.loading').forEach(el => {
-      el.innerHTML = '<div style="color:#A32D2D;font-size:13px;padding:8px">⚠ ' + err.message + '</div>';
+    const results = await Promise.all([
+      loadTasks(),loadBudget(),loadTimeline(),
+      loadShopping(),loadVendors(),loadSchedule()
+    ]);
+  } catch(err){
+    console.error('Init error:',err);
+    document.querySelectorAll('.ld').forEach(el=>{
+      el.innerHTML='<div style="color:var(--urgent);font-size:13px">⚠ '+err.message+'</div>';
     });
   }
 }
