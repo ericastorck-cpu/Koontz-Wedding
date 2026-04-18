@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Koontz Wedding Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.50.0/dist/umd/supabase.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -559,7 +559,8 @@ const SEED_SHOPPING = [
 
 // ── SEED DATABASE ──
 async function seedIfEmpty(){
-  const {count} = await sb.from('tasks').select('*',{count:'exact',head:true});
+  const {data, error, count} = await sb.from('tasks').select('*',{count:'exact',head:true});
+  if(error) { console.error('DB error:', error); throw new Error('Cannot reach database: ' + error.message); }
   if(count > 0) return;
   await sb.from('tasks').insert(SEED_TASKS);
   await sb.from('budget').insert(SEED_BUDGET);
@@ -948,8 +949,15 @@ function updateMetrics(){
 
 // ── INIT ──
 async function init(){
-  await seedIfEmpty();
-  await Promise.all([loadTasks(),loadBudget(),loadTimeline(),loadShopping(),loadVendors(),loadSchedule()]);
+  try {
+    await seedIfEmpty();
+    await Promise.all([loadTasks(),loadBudget(),loadTimeline(),loadShopping(),loadVendors(),loadSchedule()]);
+  } catch(err) {
+    console.error('Init failed:', err);
+    document.querySelectorAll('.loading').forEach(el => {
+      el.innerHTML = '<div style="color:#A32D2D;font-size:13px;padding:8px">⚠ ' + err.message + '</div>';
+    });
+  }
 }
 
 init();
